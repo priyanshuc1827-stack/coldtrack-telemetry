@@ -65,15 +65,17 @@ export default function App() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>('');
 
-  // Profile Context Block
+  // Profile Context Block (Default data used ONLY inside the private dashboard view)
   const [formData, setFormData] = useState<FormData>({
     name: 'Priyanshu Chaudhari',
     email: 'tech@ldrp.edu.in',
     idCode: '24BEIT30018',
     role: 'Lead Cold-Chain Systems Architect',
   });
-  const [editName, setEditName] = useState<string>(formData.name);
-  const [editEmail, setEditEmail] = useState<string>(formData.email);
+  
+  // Clean, empty string initial states so form inputs load completely blank for new users!
+  const [editName, setEditName] = useState<string>('');
+  const [editEmail, setEditEmail] = useState<string>('');
   const [profileSuccess, setProfileSuccess] = useState<boolean>(false);
 
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
@@ -172,6 +174,15 @@ export default function App() {
       return;
     }
     setPasswordError('');
+    
+    // Pass user inputs down to dashboard state context securely if registering
+    if (authMode === 'signup') {
+      setFormData({
+        ...formData,
+        name: editName || 'Authorized Operator',
+        email: editEmail || 'operator@ldrp.edu.in'
+      });
+    }
     setCurrentRoute('dashboard');
   };
 
@@ -424,20 +435,20 @@ export default function App() {
                       type="text"
                       required
                       value={editName}
-                      onChange={(e) => { setEditName(e.target.value); setFormData({ ...formData, name: e.target.value }); }}
+                      onChange={(e) => setEditName(e.target.value)}
                       className={`w-full px-3.5 py-2.5 rounded-xl border font-normal transition-all outline-none text-sm ${inputThemeBg}`}
                       placeholder="USERNAME"
                     />
                   </div>
                 )}
-
+                
                 <div className="space-y-1.5">
                   <label className={`block text-xs font-bold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
                   <input
                     type="email"
                     required
                     value={editEmail}
-                    onChange={(e) => { setEditEmail(e.target.value); setFormData({ ...formData, email: e.target.value }); }}
+                    onChange={(e) => setEditEmail(e.target.value)}
                     className={`w-full px-3.5 py-2.5 rounded-xl border font-normal transition-all outline-none text-sm ${inputThemeBg}`}
                     placeholder="Email"
                   />
