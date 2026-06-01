@@ -245,12 +245,28 @@ export default function App() {
           <div className="max-w-5xl mx-auto px-6 py-12">
             <div className={`p-6 rounded-3xl border ${darkMode ? 'bg-[#16181D]/60 border-[#262930]' : 'bg-white border-[#E4E7EB]'}`}>
               <div className="border-b pb-3 mb-4 border-gray-500/10 flex justify-between items-center text-xs">
-                <span className="font-bold tracking-widest font-mono">⚡ LIVE DEMO TRACKER SHUTTLE</span><span className="w-2 h-2 rounded-full bg-[#107C41] animate-pulse" />
+                <span className="font-bold tracking-widest font-mono text-slate-700 dark:text-slate-400">⚡ LIVE DEMO TRACKER SHUTTLE</span><span className="w-2 h-2 rounded-full bg-[#107C41] animate-pulse" />
               </div>
-              <div className="grid md:grid-cols-3 gap-4 text-gray-900 dark:text-white">
-                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">Amul Fresh Milk</span><p className="text-[11px] opacity-60">Anand → Gandhinagar</p><p className="text-xl font-black mt-2 text-[#107C41]">3.4°C</p></div>
-                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">Bio-Vaccine B3</span><p className="text-[11px] opacity-60">Mumbai → Ahmedabad</p><p className="text-xl font-black mt-2 text-emerald-500">5.2°C</p></div>
-                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">AI Core Node</span><p className="text-[11px] opacity-60">Scanning anomalies...</p><p className="text-xs font-mono font-bold mt-3 text-purple-500">99.4% Safety Rating</p></div>
+              
+              {/* ── HIGH-CONTRAST LIGHT MODE CARDS CORRECTION ── */}
+              <div className="grid md:grid-cols-3 gap-4 text-slate-800 dark:text-white">
+                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-slate-200'}`}>
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">Amul Fresh Milk</span>
+                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Anand → Gandhinagar</p>
+                  <p className="text-xl font-black mt-3 text-[#107C41]">3.4°C</p>
+                </div>
+                
+                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-slate-200'}`}>
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">Bio-Vaccine B3</span>
+                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Mumbai → Ahmedabad</p>
+                  <p className="text-xl font-black mt-3 text-emerald-600 dark:text-emerald-500">5.2°C</p>
+                </div>
+                
+                <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-slate-200'}`}>
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">AI Core Node</span>
+                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Scanning anomalies...</p>
+                  <p className="text-xs font-mono font-bold mt-4 text-purple-600 dark:text-purple-400">99.4% Safety Rating</p>
+                </div>
               </div>
             </div>
           </div>
