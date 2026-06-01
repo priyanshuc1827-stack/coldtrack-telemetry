@@ -60,10 +60,15 @@ export default function App() {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [prevSelectedId, setPrevSelectedId] = useState<string>('SH-902');
 
-  // Authentication Fields
+  // Authentication Fields & Live Mock Verification Database
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>('');
+  
+  // Pre-seed an administrator record for instant testing access
+  const [userDatabase, setUserDatabase] = useState<Record<string, string>>({
+    'tech@ldrp.edu.in': 'Password123!',
+  });
 
   // Profile Context Block (Default data used ONLY inside the private dashboard view)
   const [formData, setFormData] = useState<FormData>({
@@ -89,7 +94,6 @@ export default function App() {
   const activeDetailShipment = shipments.find((s) => s.id === selectedId) || shipments[0];
 
   // Dynamic Theme Definitions
-  const baseThemeBg = darkMode ? 'bg-[#0E0F12] text-[#E2E8F0]' : 'bg-[#FAFAFB] text-[#1E2229]';
   const cardThemeBg = darkMode ? 'bg-[#16181D]/90 border-[#262930] backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)]' : 'bg-white/95 border-[#E4E7EB] backdrop-blur-md shadow-[0_20px_40px_rgba(0,0,0,0.04)]';
   const inputThemeBg = darkMode ? 'bg-[#0F1013] border-[#262930] text-white focus:border-[#107C41]' : 'bg-white border-[#DCDFE4] text-gray-900 focus:border-[#107C41]';
   const secondaryBg = darkMode ? 'bg-[#20242C]' : 'bg-[#F3F4F6]';
@@ -167,22 +171,59 @@ export default function App() {
   };
 
 
+  // ── SECURE ACCOUNT GATEWAY ROUTING INTERCEPTOR ──
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!isPasswordValid) {
       setPasswordError("Password signature does not meet validation rules.");
       return;
     }
-    setPasswordError('');
-    
+
     if (authMode === 'signup') {
+      if (userDatabase[editEmail]) {
+        setPasswordError("An account with this email already exists.");
+        return;
+      }
+
+      // Record credentials to temporary app memory register
+      setUserDatabase(prev => ({
+        ...prev,
+        [editEmail]: password
+      }));
+
       setFormData({
         ...formData,
         name: editName || 'Authorized Operator',
         email: editEmail || 'operator@ldrp.edu.in'
       });
+
+      setPasswordError('');
+      setCurrentRoute('dashboard');
+    } else {
+      // SIGN IN AUDIT FLOW
+      const storedSecret = userDatabase[editEmail];
+
+      if (!storedSecret) {
+        setPasswordError("No account found with this email. Please sign up first.");
+        return;
+      }
+
+      if (storedSecret !== password) {
+        setPasswordError("Incorrect password signature. Access denied.");
+        return;
+      }
+
+      // Sync active view components to identity parameters
+      setFormData({
+        ...formData,
+        name: editName || 'Authorized Operator',
+        email: editEmail
+      });
+
+      setPasswordError('');
+      setCurrentRoute('dashboard');
     }
-    setCurrentRoute('dashboard');
   };
 
   const handleUpdateProfile = (e: React.FormEvent) => {
@@ -244,7 +285,7 @@ export default function App() {
   const handleDrillDown = (id: string, temp: number) => { setSelectedId(id); setSimValue(temp.toString()); setActiveTab('detail'); };
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-200 relative ${baseThemeBg}`}>
+    <div className={`min-h-screen font-sans transition-colors duration-200 relative ${darkMode ? 'bg-[#0E0F12] text-[#E2E8F0]' : 'bg-[#FAFAFB] text-[#1E2229]'}`}>
 
       {/* PHASE 1: ODOO STYLE FULL SCROLLING PRODUCT MARKETING HOMEPAGE */}
       {currentRoute === 'landing' && (
@@ -266,7 +307,7 @@ export default function App() {
                   {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                 </button>
                 <button
-                  onClick={() => { setAuthMode('signin'); setCurrentRoute('auth'); }}
+                  onClick={() => { setAuthMode('signin'); setCurrentRoute('auth'); setPassword(''); setPasswordError(''); }}
                   className="bg-[#107C41] hover:bg-[#0D6334] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all"
                 >
                   Sign In
@@ -359,7 +400,7 @@ export default function App() {
               <h2 className={`text-3xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-[#1E2229]'}`}>Unleash your platform potential</h2>
               <p className="text-xs text-gray-500 dark:text-gray-400">No credit cards or hardware keys required. Immediate administrative workspace creation hub.</p>
               <button
-                onClick={() => { setAuthMode('signup'); setCurrentRoute('auth'); }}
+                onClick={() => { setAuthMode('signup'); setCurrentRoute('auth'); setPassword(''); setPasswordError(''); }}
                 className="inline-flex items-center gap-2 bg-[#107C41] hover:bg-[#0D6334] text-white px-6 py-3.5 rounded-xl font-bold text-sm shadow-md transition-all active:scale-95"
               >
                 Start Tracking Now — It's Free <ArrowRight className="w-4 h-4" />
@@ -396,7 +437,7 @@ export default function App() {
       {currentRoute === 'auth' && (
         <div className={`min-h-screen flex flex-col justify-between p-6 relative overflow-hidden transition-colors ${darkMode ? 'bg-[#0A0B0E]' : 'bg-[#F4F5F7]'}`}>
           
-          {/* Subtle Dynamic Geometric SVG Background Blueprint */}
+          {/* Faint Grid Background Overlay Mesh */}
           <div className="absolute inset-0 pointer-events-none z-0">
             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 40H0V0h40v40zM1 39h38V1H1v38z' fill='%23107C41' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
@@ -509,7 +550,7 @@ export default function App() {
                   disabled={!isPasswordValid}
                   className="w-full bg-[#107C41] hover:bg-[#0D6334] disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:bg-gray-800 disabled:opacity-50 text-white py-3 rounded-xl font-bold tracking-wide text-sm shadow-sm transition-all text-center block"
                 >
-                  Confirm & Log In
+                  {authMode === 'signin' ? 'Verify & Log In' : 'Register Account'}
                 </button>
               </form>
 
