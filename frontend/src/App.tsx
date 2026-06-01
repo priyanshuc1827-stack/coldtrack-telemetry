@@ -73,7 +73,7 @@ export default function App() {
     role: 'Lead Cold-Chain Systems Architect',
   });
   
-  // Clean, empty string initial states so form inputs load completely blank for new users!
+  // Clean empty initial form properties
   const [editName, setEditName] = useState<string>('');
   const [editEmail, setEditEmail] = useState<string>('');
   const [profileSuccess, setProfileSuccess] = useState<boolean>(false);
@@ -90,7 +90,7 @@ export default function App() {
 
   // Dynamic Theme Definitions
   const baseThemeBg = darkMode ? 'bg-[#0E0F12] text-[#E2E8F0]' : 'bg-[#FAFAFB] text-[#1E2229]';
-  const cardThemeBg = darkMode ? 'bg-[#16181D] border-[#262930]' : 'bg-white border-[#E4E7EB] shadow-[0_4px_20px_rgba(0,0,0,0.02)]';
+  const cardThemeBg = darkMode ? 'bg-[#16181D]/90 border-[#262930] backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)]' : 'bg-white/95 border-[#E4E7EB] backdrop-blur-md shadow-[0_20px_40px_rgba(0,0,0,0.04)]';
   const inputThemeBg = darkMode ? 'bg-[#0F1013] border-[#262930] text-white focus:border-[#107C41]' : 'bg-white border-[#DCDFE4] text-gray-900 focus:border-[#107C41]';
   const secondaryBg = darkMode ? 'bg-[#20242C]' : 'bg-[#F3F4F6]';
 
@@ -136,7 +136,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [currentRoute]);
 
-  // Safe manual slider synchronization hook
+  // Slider alignment hook
   useEffect(() => {
     if (selectedId !== prevSelectedId) {
       setPrevSelectedId(selectedId);
@@ -175,7 +175,6 @@ export default function App() {
     }
     setPasswordError('');
     
-    // Pass user inputs down to dashboard state context securely if registering
     if (authMode === 'signup') {
       setFormData({
         ...formData,
@@ -245,7 +244,7 @@ export default function App() {
   const handleDrillDown = (id: string, temp: number) => { setSelectedId(id); setSimValue(temp.toString()); setActiveTab('detail'); };
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-200 ${baseThemeBg}`}>
+    <div className={`min-h-screen font-sans transition-colors duration-200 relative ${baseThemeBg}`}>
 
       {/* PHASE 1: ODOO STYLE FULL SCROLLING PRODUCT MARKETING HOMEPAGE */}
       {currentRoute === 'landing' && (
@@ -312,7 +311,7 @@ export default function App() {
           <div className="max-w-5xl mx-auto px-6 py-12">
             <div className={`p-6 rounded-3xl border ${darkMode ? 'bg-[#16181D]/60 border-[#262930]' : 'bg-white border-[#E4E7EB] shadow-[0_20px_50px_rgba(0,0,0,0.02)]'}`}>
               <div className="border-b pb-3 mb-4 border-gray-500/10 flex justify-between items-center text-xs">
-                <span className={`font-bold tracking-widest font-mono ${darkMode ? 'text-gray-400 opacity-60' : 'text-gray-500 font-semibold'}`}>⚡ LIVE DEMO TRACKER SHUTTLE</span>
+                <span className={`font-bold tracking-widest font-mono ${darkMode ? 'text-gray-400 opacity-60' : 'text-gray-700'}`}>⚡ LIVE DEMO TRACKER SHUTTLE</span>
                 <span className="w-2 h-2 rounded-full bg-[#107C41] animate-pulse" />
               </div>
               <div className={`grid md:grid-cols-3 gap-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -393,10 +392,19 @@ export default function App() {
         </div>
       )}
 
-      {/* PHASE 2 — AUTH GATEWAY */}
+      {/* PHASE 2 — AUTH GATEWAY (WITH COMPACT TECH GRID INJECTION) */}
       {currentRoute === 'auth' && (
-        <div className={`min-h-screen flex flex-col justify-between p-6 ${darkMode ? 'bg-[#0E0F12]' : 'bg-[#F8F9FA]'}`}>
-          <header className="max-w-4xl w-full mx-auto flex justify-between items-center py-2">
+        <div className={`min-h-screen flex flex-col justify-between p-6 relative overflow-hidden transition-colors ${darkMode ? 'bg-[#0A0B0E]' : 'bg-[#F4F5F7]'}`}>
+          
+          {/* Subtle Dynamic Geometric SVG Background Blueprint */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 40H0V0h40v40zM1 39h38V1H1v38z' fill='%23107C41' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
+            }} />
+            <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[160px] opacity-20 pointer-events-none ${darkMode ? 'bg-[#107C41]' : 'bg-[#107C41]/60'}`} />
+          </div>
+
+          <header className="max-w-4xl w-full mx-auto flex justify-between items-center py-2 relative z-10">
             <button
               type="button"
               onClick={() => { setCurrentRoute('landing'); setPassword(''); setPasswordError(''); }}
@@ -405,14 +413,14 @@ export default function App() {
               <ArrowLeft className="w-4 h-4" /> Back to homepage
             </button>
             <div className="flex items-center gap-2">
-              <div className="bg-[#107C41] text-white p-1.5 rounded-lg shadow-sm">
+              <div className="bg-[#107C41] text-white p-1.5 rounded-lg shadow-md">
                 <Shield className="w-4 h-4" />
               </div>
               <span className={`font-bold text-sm tracking-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>ColdTrack</span>
             </div>
           </header>
 
-          <div className="w-full max-w-md mx-auto my-auto pt-4 pb-12">
+          <div className="w-full max-w-md mx-auto my-auto pt-4 pb-12 relative z-10">
             <div className={`p-8 rounded-2xl border transition-all duration-300 ${cardThemeBg}`}>
               <div className="space-y-1 mb-6 text-left">
                 <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -475,7 +483,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className={`p-4 rounded-xl border space-y-2 text-[11px] font-mono ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-[#F9FAFB] border-[#EDEFF1]'}`}>
+                <div className={`p-4 rounded-xl border space-y-2 text-[11px] font-mono ${darkMode ? 'bg-[#0F1013]/90 border-gray-800' : 'bg-[#F9FAFB]/90 border-[#EDEFF1]'}`}>
                   <p className={`font-bold uppercase tracking-wider text-[9px] ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Password Parameters Check:</p>
                   <div className={`grid grid-cols-2 gap-2 ${darkMode ? 'text-gray-400' : 'text-gray-700 font-medium'}`}>
                     <div className={`flex items-center gap-1.5 ${checks.length ? 'text-emerald-600 font-bold' : 'opacity-40'}`}>
@@ -516,12 +524,16 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          <footer className="max-w-4xl w-full mx-auto text-center text-[10px] text-gray-400 relative z-10 py-2">
+            <span>Secure TLS Handshake Node Active</span>
+          </footer>
         </div>
       )}
 
       {/* PHASE 3 — CENTRAL CONSOLE DASHBOARD */}
       {currentRoute === 'dashboard' && (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen relative z-10">
           <Sidebar
             activeTab={activeTab}
             setActiveTab={(tab) => {
