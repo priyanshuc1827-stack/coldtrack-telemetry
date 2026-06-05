@@ -73,8 +73,15 @@ export default function App() {
 
   const activeDetailShipment = shipments.find((s) => s.id === selectedId) || shipments[0];
 
-  const cardThemeBg = darkMode ? 'bg-[#16181D]/90 border-[#262930] backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)]' : 'bg-white/95 border-[#E4E7EB] backdrop-blur-md shadow-[0_20px_40px_rgba(0,0,0,0.04)]';
-  const inputThemeBg = darkMode ? 'bg-[#0F1013] border-[#262930] text-white focus:border-[#107C41]' : 'bg-white border-[#DCDFE4] text-gray-900 focus:border-[#107C41]';
+  // Modified themes to handle uniform text containment across Light/Dark modes
+  const cardThemeBg = darkMode 
+    ? 'bg-[#16181D]/90 border-[#262930] backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-[#E2E8F0]' 
+    : 'bg-white/95 border-[#E4E7EB] backdrop-blur-md shadow-[0_20px_40px_rgba(0,0,0,0.04)] text-[#1E2229]';
+    
+  const inputThemeBg = darkMode 
+    ? 'bg-[#0F1013] border-[#262930] text-white focus:border-[#107C41]' 
+    : 'bg-[#F9FAFB] border-[#DCDFE4] text-gray-900 focus:border-[#107C41]';
+    
   const secondaryBg = darkMode ? 'bg-[#20242C]' : 'bg-[#F3F4F6]';
 
   const theme: ThemeClasses = { cardThemeBg, inputThemeBg, secondaryBg };
@@ -211,7 +218,7 @@ export default function App() {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-200 relative ${darkMode ? 'bg-[#0E0F12] text-[#E2E8F0]' : 'bg-[#FAFAFB] text-[#1E2229]'}`}>
 
-      {/* ROUTE 1: SCROLLING MARKETING LANDING HOME PAGE */}
+      {/* ROUTE 1: MARKETING LANDING HOME PAGE */}
       {currentRoute === 'landing' && (
         <div className="w-full overflow-y-auto">
           <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-colors ${darkMode ? 'bg-[#0E0F12]/80 border-[#262930]' : 'bg-white/80 border-[#E4E7EB]'}`}>
@@ -245,9 +252,9 @@ export default function App() {
           <div className="max-w-5xl mx-auto px-6 py-12">
             <div className={`p-6 rounded-3xl border ${darkMode ? 'bg-[#16181D]/60 border-[#262930]' : 'bg-white border-[#E4E7EB]'}`}>
               <div className="border-b pb-3 mb-4 border-gray-500/10 flex justify-between items-center text-xs">
-                <span className="font-bold tracking-widest font-mono">⚡ LIVE DEMO TRACKER SHUTTLE</span><span className="w-2 h-2 rounded-full bg-[#107C41] animate-pulse" />
+                <span className="font-bold tracking-widest font-mono opacity-80">⚡ LIVE DEMO TRACKER SHUTTLE</span><span className="w-2 h-2 rounded-full bg-[#107C41] animate-pulse" />
               </div>
-              <div className="grid md:grid-cols-3 gap-4 text-gray-900 dark:text-white">
+              <div className="grid md:grid-cols-3 gap-4">
                 <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">Amul Fresh Milk</span><p className="text-[11px] opacity-60">Anand → Gandhinagar</p><p className="text-xl font-black mt-2 text-[#107C41]">3.4°C</p></div>
                 <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">Bio-Vaccine B3</span><p className="text-[11px] opacity-60">Mumbai → Ahmedabad</p><p className="text-xl font-black mt-2 text-emerald-500">5.2°C</p></div>
                 <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-[#0F1013] border-gray-800' : 'bg-gray-50 border-gray-200'}`}><span className="font-bold text-sm">AI Core Node</span><p className="text-[11px] opacity-60">Scanning anomalies...</p><p className="text-xs font-mono font-bold mt-3 text-purple-500">99.4% Safety Rating</p></div>
@@ -319,14 +326,29 @@ export default function App() {
 
             {activeTab === 'account' && (
               <div className="grid md:grid-cols-3 gap-6 items-start">
-                <div className={`border p-6 rounded-3xl text-center space-y-4 ${cardThemeBg}`}><div className="w-16 h-16 bg-[#107C41] text-white flex items-center justify-center text-2xl font-extrabold rounded-full mx-auto font-mono">P</div><div><h3 className="text-base font-bold">{formData.name}</h3><p className="text-xs opacity-60 font-mono">{formData.role}</p></div></div>
+                <div className={`border p-6 rounded-3xl text-center space-y-4 ${cardThemeBg}`}>
+                  <div className="w-16 h-16 bg-[#107C41] text-white flex items-center justify-center text-2xl font-extrabold rounded-full mx-auto font-mono">P</div>
+                  <div>
+                    <h3 className="text-base font-bold">{formData.name}</h3>
+                    <p className="text-xs opacity-60 font-mono">{formData.role}</p>
+                  </div>
+                </div>
                 <div className={`border p-6 rounded-3xl md:col-span-2 space-y-4 ${cardThemeBg}`}>
-                  <div className="border-b pb-2 border-gray-300/20 flex items-center gap-2"><Settings className="w-4 h-4 text-[#107C41]" /><h4 className="text-xs font-bold font-mono uppercase">Identity Record Mutator</h4></div>
+                  <div className="border-b pb-2 border-gray-300/20 flex items-center gap-2">
+                    <Settings className="w-4 h-4 text-[#107C41]" />
+                    <h4 className="text-xs font-bold font-mono uppercase">Identity Record Mutator</h4>
+                  </div>
                   {profileSuccess && <div className="p-3 bg-[#E2F4E9] text-[#107C41] text-xs font-mono font-bold rounded-xl">✓ Account updates saved successfully!</div>}
                   <form onSubmit={handleUpdateProfile} className="space-y-4 text-xs font-mono">
-                    <div className="space-y-1"><label className="font-bold opacity-60 uppercase text-[10px]">Edit Operator Name</label><input type="text" required value={editName} onChange={(e) => setEditName(e.target.value)} className={`w-full px-4 py-2 rounded-xl focus:outline-none ${inputThemeBg}`} /></div>
-                    <div className="space-y-1"><label className="font-bold opacity-60 uppercase text-[10px]">Edit Contact Email</label><input type="email" required value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className={`w-full px-4 py-2 rounded-xl focus:outline-none ${inputThemeBg}`} /></div>
-                    <button type="submit" className="bg-[#1E2229] dark:bg-[#107C41] text-white font-bold uppercase px-5 py-2 rounded-xl shadow-md">Commit Updates</button>
+                    <div className="space-y-1">
+                      <label className="font-bold opacity-60 uppercase text-[10px]">Edit Operator Name</label>
+                      <input type="text" required value={editName} onChange={(e) => setEditName(e.target.value)} className={`w-full px-4 py-2 rounded-xl focus:outline-none ${inputThemeBg}`} />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="font-bold opacity-60 uppercase text-[10px]">Edit Contact Email</label>
+                      <input type="email" required value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className={`w-full px-4 py-2 rounded-xl focus:outline-none ${inputThemeBg}`} />
+                    </div>
+                    <button type="submit" className="bg-[#1E2229] dark:bg-[#107C41] text-white font-bold uppercase px-5 py-2 rounded-xl shadow-md transition-colors hover:opacity-90">Commit Updates</button>
                   </form>
                 </div>
               </div>
